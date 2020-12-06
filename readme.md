@@ -1,6 +1,6 @@
 # Subtitles parser
 
-Converts popular captions, subtitles, labels (srt, vtt, audacity) into simple Javascript object like:
+Converts popular formats of captions, subtitles, labels (srt, vtt, audacity) into simple Javascript object like:
 
 ```javascript
 {
