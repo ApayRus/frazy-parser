@@ -105,4 +105,4 @@ Difference srt|vtt cue template:
 	return mapTypeParser[subsType]()
 }
 
-module.exports = { parseTimecode, checkSubsType, parseSubs }
+export { parseTimecode, checkSubsType, parseSubs }
