@@ -1,3 +1,4 @@
+import matchAll from 'string.prototype.matchall'
 import { prefixedIndex } from './utils.js'
 
 /**
@@ -18,7 +19,7 @@ const parseTimecode = timecode => {
 
 const extractVoiceTags = cueText => {
     const voiceRegex = new RegExp(/<v(\S+?)?\s+?(.+?)>([\s\S]+?)(<\/v>|$)/g)
-    const matches = [...cueText.matchAll(voiceRegex)]
+    const matches = [...matchAll(cueText, voiceRegex)]
     if (!matches.length) return [{ text: cueText }]
     else {
         const result = matches.reduce((prevItem, currentItem, index, array) => {
@@ -78,7 +79,7 @@ const checkSubsType = text => {
 }
 
 const parseSrtVtt = (subsText, cueRegexTemplate) => {
-    const matchArray = [...(subsText + '\n\n').matchAll(cueRegexTemplate)]
+    const matchArray = [...matchAll(subsText + '\n\n', cueRegexTemplate)]
     return matchArray.reduce((prevItem, curItem, curIndex) => {
         let [, identifier = '', start, end, body] = curItem
         identifier = identifier.trim()
@@ -91,7 +92,7 @@ const parseSrtVtt = (subsText, cueRegexTemplate) => {
 }
 
 const parseAudacity = (subsText, cueRegexTemplate) => {
-    const matchArray = [...subsText.matchAll(cueRegexTemplate)]
+    const matchArray = [...matchAll(subsText, cueRegexTemplate)]
     return matchArray.reduce((prevItem, curItem, curIndex) => {
         let [, start, end, body] = curItem
         start = +start
