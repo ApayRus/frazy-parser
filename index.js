@@ -164,6 +164,8 @@ Difference srt|vtt cue template:
 
     const phrasesObject = mapTypeParser[subsType]()
 
+    if (!phrasesObject) return null
+
     if (!extractVoices) return phrasesObject
     else {
         Object.entries(phrasesObject).forEach(entry => {
