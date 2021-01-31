@@ -1,4 +1,4 @@
-import { extractVoiceTags, parseSubs } from './index.js'
+import { extractVoiceTags, parseSubs } from './subtitles.js'
 
 const srtTextExample = `1
 00:00:00,498 --> 00:00:02,827
