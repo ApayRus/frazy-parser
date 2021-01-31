@@ -1,5 +1,11 @@
 export { parseSubs }
-from './subtitles.js'
+from './parsers/subtitles.js'
 
-export { parse, quizParser, mediaParser, mediaRegex, quizRegex }
-from './intext'
+export {
+    parse,
+    quizParser,
+    mediaParser,
+    mediaRegex,
+    quizRegex
+}
+from './parsers/intext.js'

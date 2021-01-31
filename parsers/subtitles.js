@@ -1,5 +1,5 @@
 import matchAll from 'string.prototype.matchall'
-import { prefixedIndex } from './utils.js'
+import { prefixedIndex } from '../utils.js'
 
 /**
  * works for SRT, VTT, ASS
