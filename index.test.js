@@ -115,7 +115,7 @@ and third line`
     expect(extractVoiceTags(input[3])).toEqual(output[3])
 })
 
-test.skip('parseVTT', () => {
+test('parseVTT', () => {
     const vttOutput = {
         '001': {
             identifier: '',

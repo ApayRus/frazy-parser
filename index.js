@@ -78,7 +78,27 @@ const checkSubsType = text => {
     return 'unknown'
 }
 
-const parseSrtVtt = (subsText, cueRegexTemplate) => {
+const parseSrtVtt = subsText => {
+    /*
+Difference srt|vtt cue template:
+// identifier is optional | required
+// hours is optional | required
+// milliseconds delimiter is dot | comma 
+*/
+
+    const srtCueTemplate = new RegExp(
+        /^(\d+\s+)(\d\d:\d\d:\d\d,\d\d\d)\s+-->\s+(\d\d:\d\d:\d\d,\d\d\d)\s+([\s\S]+?)[\n\r]{2}/,
+        'mg'
+    )
+
+    const vttCueTemplate = new RegExp(
+        /^(.+[\n\r])?(\d?\d?:?\d\d:\d\d\.\d\d\d)\s+-->\s+(\d?\d?:?\d\d:\d\d\.\d\d\d).*?[\n\r]([\s\S]+?)[\n\r]{2}/,
+        'mg'
+    )
+
+    const cueRegexTemplate =
+        checkSubsType(subsText) === 'srt' ? srtCueTemplate : vttCueTemplate
+
     const matchArray = [...matchAll(subsText + '\n\n', cueRegexTemplate)]
     return matchArray.reduce((prevItem, curItem, curIndex) => {
         let [, identifier = '', start, end, body] = curItem
@@ -91,8 +111,12 @@ const parseSrtVtt = (subsText, cueRegexTemplate) => {
     }, {})
 }
 
-const parseAudacity = (subsText, cueRegexTemplate) => {
-    const matchArray = [...matchAll(subsText, cueRegexTemplate)]
+const parseAudacity = subsText => {
+    const audacityCueTemplate = new RegExp(
+        /(\d+?\.?\d+?)\t(\d+?\.?\d+?)\t(.+)/,
+        'mg'
+    )
+    const matchArray = [...matchAll(subsText, audacityCueTemplate)]
     return matchArray.reduce((prevItem, curItem, curIndex) => {
         let [, start, end, body] = curItem
         start = +start
@@ -131,32 +155,10 @@ const parseAudacity = (subsText, cueRegexTemplate) => {
 	}
  */
 const parseSubs = (text, extractVoices = true) => {
-    /*
-Difference srt|vtt cue template:
-// identifier is optional | required
-// hours is optional | required
-// milliseconds delimiter is dot | comma 
-*/
-
-    const srtCueTemplate = new RegExp(
-        /^(\d+\s+)(\d\d:\d\d:\d\d,\d\d\d)\s+-->\s+(\d\d:\d\d:\d\d,\d\d\d)\s+([\s\S]+?)[\n\r]{2}/,
-        'mg'
-    )
-
-    const vttCueTemplate = new RegExp(
-        /^(.+[\n\r])?(\d?\d?:?\d\d:\d\d\.\d\d\d)\s+-->\s+(\d?\d?:?\d\d:\d\d\.\d\d\d).*?[\n\r]([\s\S]+?)[\n\r]{2}/,
-        'mg'
-    )
-
-    const audacityCueTemplate = new RegExp(
-        /(\d+?\.?\d+?)\t(\d+?\.?\d+?)\t(.+)/,
-        'mg'
-    )
-
     const mapTypeParser = {
-        srt: () => parseSrtVtt(text, srtCueTemplate),
-        vtt: () => parseSrtVtt(text, vttCueTemplate),
-        audacity: () => parseAudacity(text, audacityCueTemplate),
+        srt: () => parseSrtVtt(text),
+        vtt: () => parseSrtVtt(text),
+        audacity: () => parseAudacity(text),
         unknown: () => null
     }
 
@@ -171,7 +173,7 @@ Difference srt|vtt cue template:
         Object.entries(phrasesObject).forEach(entry => {
             const [key, value] = entry
             let { body } = value // string
-            body = extractVoices ? extractVoiceTags(body) : [{ body }] //array of objects
+            body = extractVoiceTags(body) //array of objects
             phrasesObject[key] = {...value, body }
         })
         return phrasesObject
