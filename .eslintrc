@@ -1,0 +1,25 @@
+{
+    "env": {
+        "node": true, // this is the best starting point
+        "browser": true, // for react web
+		"jest": true, 
+	},
+	"extends": [
+		"eslint:recommended",
+		// "plugin:react/recommended"
+	], 
+	// "parser": "babel-eslint", // needed to make babel stuff work properly, 
+	"parserOptions": {
+		"sourceType": "module",
+		"ecmaVersion": 2020
+    },
+	"rules":{
+		"no-undef":"error", 
+		"no-unused-expressions":"warn", 
+		"no-unused-vars":"warn", 
+		"no-unused-labels":"warn", 
+		"react/prop-types": "off", 
+		"no-console":"warn", 
+		"no-useless-escape":"warn"
+	}
+}
