@@ -1,20 +1,5 @@
 // import matchAll from "string.prototype.matchall";
 
-const mediaRegex = new RegExp(
-	/<p>\s*?\[\s*?media\s*?\|\s*?(\S+?)\s*\]\s*?<\/p>/g
-)
-//general quiz both: () and [] for make ids for them
-const quizRegex = new RegExp(/<ul>(\s*<li>[\(\[][\s\S]*?[\]\)][\s\S]+?)<\/ul>/g)
-
-const getRegexIndexes = (text, regex, label) => {
-	return [...text.matchAll(regex)].map(elem => {
-		const [outerText] = elem
-		const { index: startIndex } = elem
-		const endIndex = startIndex + outerText.length
-		return { label, indexes: [startIndex, endIndex] }
-	})
-}
-
 /**
  * categorize every peace of text by regex patterns
  * stick a label (its type) to each part of text
@@ -92,6 +77,23 @@ const parseText = (
 		})
 		const data = parser ? parser(text) : null
 		return { ...elem, text, data }
+	})
+}
+
+// regexes
+
+const mediaRegex = new RegExp(
+	/<p>\s*?\[\s*?media\s*?\|\s*?(\S+?)\s*\]\s*?<\/p>/g
+)
+//general quiz both: () and [] for make ids for them
+const quizRegex = new RegExp(/<ul>(\s*<li>[\(\[][\s\S]*?[\]\)][\s\S]+?)<\/ul>/g)
+
+const getRegexIndexes = (text, regex, label) => {
+	return [...text.matchAll(regex)].map(elem => {
+		const [outerText] = elem
+		const { index: startIndex } = elem
+		const endIndex = startIndex + outerText.length
+		return { label, indexes: [startIndex, endIndex] }
 	})
 }
 
