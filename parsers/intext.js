@@ -56,7 +56,7 @@ const parseText = (
 	array = [...categorizedIndexes, ...uncategorizedIndexes].sort(
 		(a, b) => a['indexes'][0] - b['indexes'][0]
 	)
-	const [firstIndex] = array[0]?.indexes
+	const [firstIndex] = array[0]?.indexes || []
 	if (firstIndex > 0) {
 		const zeroElement = {
 			label: defaultLabel,
