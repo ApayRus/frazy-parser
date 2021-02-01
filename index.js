@@ -5,5 +5,6 @@ export {
 	quizParser,
 	mediaParser,
 	mediaRegex,
-	quizRegex
+	quizRegex,
+	inTextSoundedWordReplacer
 } from './parsers/intext.js'
