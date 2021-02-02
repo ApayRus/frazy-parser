@@ -31,37 +31,34 @@ const parseText = (
 	const categorizedIndexes = array.sort(
 		(a, b) => a['indexes'][0] - b['indexes'][0]
 	)
-	if (categorizedIndexes.length === 0) {
-		return [
-			{
-				label: defaultLabel,
-				text: textInput,
-				indexes: [0, textInput.length]
-			}
-		]
-	}
-	//looking for gaps between categorizedIndexes and collect them
-	const uncategorizedIndexes = categorizedIndexes.reduce(
-		(prev, currentItem, index, array) => {
-			const [, currentItemEnd] = currentItem ? currentItem.indexes : []
-			const [nextItemStart] = array[index + 1]
-				? array[index + 1].indexes
-				: [textInput.length]
 
-			if (currentItemEnd + 1 !== nextItemStart && index < array.length) {
-				return [
-					...prev,
+	//looking for gaps between categorizedIndexes and collect them
+	const uncategorizedIndexes =
+		categorizedIndexes.length === 0
+			? [
 					{
 						label: defaultLabel,
-						indexes: [currentItemEnd + 1, nextItemStart - 1]
+						indexes: [0, textInput.length]
 					}
-				]
-			} else {
-				return [...prev]
-			}
-		},
-		[]
-	)
+			  ]
+			: categorizedIndexes.reduce((prev, currentItem, index, array) => {
+					const [, currentItemEnd] = currentItem ? currentItem.indexes : []
+					const [nextItemStart] = array[index + 1]
+						? array[index + 1].indexes
+						: [textInput.length]
+
+					if (currentItemEnd + 1 !== nextItemStart && index < array.length) {
+						return [
+							...prev,
+							{
+								label: defaultLabel,
+								indexes: [currentItemEnd + 1, nextItemStart - 1]
+							}
+						]
+					} else {
+						return [...prev]
+					}
+			  }, [])
 
 	// find  zero element, witch can be lost while reduce
 	array = [...categorizedIndexes, ...uncategorizedIndexes].sort(
