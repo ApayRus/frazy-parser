@@ -34,7 +34,7 @@ const parseText = (
 	//looking for gaps between categorizedIndexes and collect them
 	const uncategorizedIndexes = categorizedIndexes.reduce(
 		(prev, currentItem, index, array) => {
-			const [, currentItemEnd] = currentItem?.indexes
+			const [, currentItemEnd] = currentItem?.indexes || []
 			const [nextItemStart] = array[index + 1]?.indexes || [textInput.length]
 
 			if (currentItemEnd + 1 !== nextItemStart && index < array.length) {
