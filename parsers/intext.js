@@ -32,8 +32,8 @@ const parseText = (
 		(a, b) => a['indexes'][0] - b['indexes'][0]
 	)
 
-	//looking for gaps between categorizedIndexes and collect them
 	const uncategorizedIndexes =
+		// if there is no categorizedIndexes, all text is uncategorized
 		categorizedIndexes.length === 0
 			? [
 					{
@@ -41,11 +41,12 @@ const parseText = (
 						indexes: [0, textInput.length]
 					}
 			  ]
-			: categorizedIndexes.reduce((prev, currentItem, index, array) => {
-					const [, currentItemEnd] = currentItem ? currentItem.indexes : []
-					const [nextItemStart] = array[index + 1]
-						? array[index + 1].indexes
-						: [textInput.length]
+			: //looking for gaps between categorizedIndexes and collect them as 'uncategorized'
+			  categorizedIndexes.reduce((prev, currentItem, index, array) => {
+					const [, currentItemEnd] = currentItem?.indexes || []
+					const [nextItemStart] = array[index + 1]?.indexes || [
+						textInput.length
+					]
 
 					if (currentItemEnd + 1 !== nextItemStart && index < array.length) {
 						return [
@@ -64,7 +65,7 @@ const parseText = (
 	array = [...categorizedIndexes, ...uncategorizedIndexes].sort(
 		(a, b) => a['indexes'][0] - b['indexes'][0]
 	)
-	const [firstIndex] = array[0] ? array[0].indexes : []
+	const [firstIndex] = array[0]?.indexes || []
 	if (firstIndex > 0) {
 		const zeroElement = {
 			label: defaultLabel,
@@ -76,7 +77,7 @@ const parseText = (
 	// ===== return =====
 	return array.map(elem => {
 		const { label } = elem
-		const [startIndex, endIndex] = elem ? elem.indexes : []
+		const [startIndex, endIndex] = elem?.indexes || []
 		const { parser, replacers = [] } =
 			patterns.find(elem => elem.label === label) || {}
 		let text = textInput.slice(startIndex, endIndex)
