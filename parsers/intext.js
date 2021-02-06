@@ -121,7 +121,7 @@ const quizParser = quizText => {
 		// console.log(text);
 		const [, answerSign = ''] = text.match(answerSignRegex)
 		if (answerSign.trim()) {
-			correctAnswers.push('' + index)
+			correctAnswers.push(index)
 		}
 		text = text.replace(answerSignRegex, '')
 		return { text }
