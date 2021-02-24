@@ -69,7 +69,7 @@ const checkSubsType = text => {
 	const vttAttribute = new RegExp(/^WEBVTT/)
 	const srtAttribute = new RegExp(/^\d\s+\d\d:\d\d:\d\d,\d\d\d/)
 	const audacityAttribute = new RegExp(
-		/^(\d+?\.?\d+?)\s+?(\d+?\.?\d+?)\s+?(.+)/
+		/^(\d+?(\.\d+?)?)\s+?(\d+?\.?(\.\d+?)?)\s+?(.+)/
 	)
 
 	const { length: vttMatch } = text.match(vttAttribute) || []
@@ -122,12 +122,12 @@ Difference srt|vtt cue template:
 */
 const parseAudacity = subsText => {
 	const audacityCueTemplate = new RegExp(
-		/(\d+?\.?\d+?)\s+?(\d+?\.?\d+?)\s+?(.+)/,
+		/^(\d+?(\.\d+?)?)\s+?(\d+?\.?(\.\d+?)?)\s+?(.+)/,
 		'mg'
 	)
 	const matchArray = [...matchAll(subsText, audacityCueTemplate)]
 	return matchArray.reduce((prevItem, curItem, curIndex) => {
-		let [, start, end, body] = curItem
+		let [, start, , end, , body] = curItem
 		start = +start
 		end = +end
 		const id = prefixedIndex(curIndex + 1)
