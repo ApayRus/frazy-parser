@@ -69,7 +69,7 @@ const parseText = (
 	if (firstIndex > 0) {
 		const zeroElement = {
 			label: defaultLabel,
-			indexes: [0, firstIndex - 1]
+			indexes: [0, firstIndex]
 		}
 		array.unshift(zeroElement)
 	}
@@ -81,7 +81,6 @@ const parseText = (
 		}
 		array.push(lastElement)
 	}
-	console.log('lastIndex', lastIndex)
 
 	// ===== return =====
 	return array.map(elem => {
@@ -90,7 +89,6 @@ const parseText = (
 		const { parser, replacers = [] } =
 			patterns.find(elem => elem.label === label) || {}
 		let text = textInput.slice(startIndex, endIndex)
-		console.log('text', text)
 		replacers.forEach(replacer => {
 			text = replacer ? replacer(text) : text
 		})
@@ -128,7 +126,6 @@ const quizParser = quizText => {
 	const answerSignRegex = new RegExp(/^\s*?[\(\[]([\s\S]*?)[\]\)]\s+?/)
 	const variants = variantsMatch.map((elem, index) => {
 		let [, text] = elem
-		// console.log(text);
 		const [, answerSign = ''] = text.match(answerSignRegex)
 		if (answerSign.trim()) {
 			correctAnswers.push(index)
