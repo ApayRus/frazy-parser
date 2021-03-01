@@ -1,4 +1,4 @@
-// import matchAll from "string.prototype.matchall";
+import matchAll from 'string.prototype.matchall'
 
 /**
  * categorize every peace of text by regex patterns
@@ -106,7 +106,7 @@ const mediaRegex = new RegExp(
 const quizRegex = new RegExp(/<ul>(\s*<li>[\(\[][\s\S]*?[\]\)][\s\S]+?)<\/ul>/g)
 
 const getRegexIndexes = (text, regex, label) => {
-	return [...text.matchAll(regex)].map(elem => {
+	return [...matchAll(text, regex)].map(elem => {
 		const [outerText] = elem
 		const { index: startIndex } = elem
 		const endIndex = startIndex + outerText.length
@@ -121,7 +121,7 @@ const quizParser = quizText => {
 	const firstCheckboxRegex = new RegExp(/<ul>\s*?<li>\s*?\[/)
 	const type = quizText.match(firstCheckboxRegex) ? 'multiple' : 'single'
 	const variantRegex = new RegExp(/<li>(.+?)<\/li>/g)
-	const variantsMatch = [...quizText.matchAll(variantRegex)]
+	const variantsMatch = [...matchAll(quizText, variantRegex)]
 	// inside checkbox or radiobutton
 	const answerSignRegex = new RegExp(/^\s*?[\(\[]([\s\S]*?)[\]\)]\s+?/)
 	const variants = variantsMatch.map((elem, index) => {
