@@ -136,6 +136,22 @@ const parseAudacity = subsText => {
 }
 
 /**
+ * gives ids for lines of text
+ * useful for translations to subs, without timing
+ * @param {string} text
+ * @returns {object} - phrases {id:{text}}
+ */
+const parsePlainText = text => {
+	if (!text) return {}
+	const rowsArray = text.split('\n')
+	const obj = rowsArray.reduce((prev, item, index) => {
+		const rowIndex = prefixedIndex(index + 1)
+		return { ...prev, [rowIndex]: { text } }
+	}, {})
+	return obj
+}
+
+/**
  * works for VTT, SRT, Audacity
  * @param {string} text
  * @param {boolean} extractVoices - true by default. voice is webvtt <v> tag. 
@@ -168,7 +184,7 @@ const parseSubs = (text, extractVoices = true) => {
 		srt: () => parseSrtVtt(text),
 		vtt: () => parseSrtVtt(text),
 		audacity: () => parseAudacity(text),
-		unknown: () => null
+		unknown: () => parsePlainText(text)
 	}
 
 	const subsType = checkSubsType(text)
