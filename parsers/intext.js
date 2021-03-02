@@ -1,5 +1,14 @@
 import matchAll from 'string.prototype.matchall'
 
+const getRegexIndexes = (text, regex, label) => {
+	return [...matchAll(text, regex)].map(elem => {
+		const [outerText] = elem
+		const { index: startIndex } = elem
+		const endIndex = startIndex + outerText.length
+		return { label, indexes: [startIndex, endIndex] }
+	})
+}
+
 /**
  * categorize every peace of text by regex patterns
  * stick a label (its type) to each part of text
@@ -99,77 +108,4 @@ const parseText = (
 
 // regexes
 
-const mediaRegex = new RegExp(
-	/<p>\s*?\[\s*?media\s*?\|\s*?(\S+?)\s*\]\s*?<\/p>/g
-)
-//general quiz both: () and [] for make ids for them
-const quizRegex = new RegExp(/<ul>(\s*<li>[\(\[][\s\S]*?[\]\)][\s\S]+?)<\/ul>/g)
-
-const getRegexIndexes = (text, regex, label) => {
-	return [...matchAll(text, regex)].map(elem => {
-		const [outerText] = elem
-		const { index: startIndex } = elem
-		const endIndex = startIndex + outerText.length
-		return { label, indexes: [startIndex, endIndex] }
-	})
-}
-
-// parsersByType
-
-const quizParser = quizText => {
-	const correctAnswers = []
-	const firstCheckboxRegex = new RegExp(/<ul>\s*?<li>\s*?\[/)
-	const type = quizText.match(firstCheckboxRegex) ? 'multiple' : 'single'
-	const variantRegex = new RegExp(/<li>(.+?)<\/li>/g)
-	const variantsMatch = [...matchAll(quizText, variantRegex)]
-	// inside checkbox or radiobutton
-	const answerSignRegex = new RegExp(/^\s*?[\(\[]([\s\S]*?)[\]\)]\s+?/)
-	const variants = variantsMatch.map((elem, index) => {
-		let [, text] = elem
-		const [, answerSign = ''] = text.match(answerSignRegex)
-		if (answerSign.trim()) {
-			correctAnswers.push(index)
-		}
-		text = text.replace(answerSignRegex, '')
-		return { text }
-	})
-
-	return { variants, correctAnswers, type }
-}
-
-const mediaParser = mediaText => {
-	const mediaRegex = new RegExp(/\[\s*?media\s*?\|\s*?(\S+?)\s*\]/)
-	const mediaMatch = mediaText.match(mediaRegex)
-	const [, path] = mediaMatch
-	return { path }
-}
-
-/**
- *
- * @param {string} htmlText - multiline text
- * @returns {string}
- * @example
- * const exampleText = 'There is some text with [[ sounded word ]] or [[sounded phrase | path to file]]'
- * convertInTextShortcutIntoTags(exampleText)
- * // 'There is some text with <inText text="sounded word" path="" /> or <inText text="sounded phrase" path="path to file" />'
- * // () ===> <inText text="some text" path="path to file" />
- */
-const inTextSoundedWordReplacer = htmlText => {
-	// [[ sounded word ]] or [[sounded phrase | path to file]]
-	const inTextSoundedWordRegex = new RegExp(
-		/\[\[\s*(.+?)\s*(\|\s*(.+?)\s*)?\]\]/gm
-	)
-	return htmlText.replace(
-		inTextSoundedWordRegex,
-		'<intext text="$1" path="$3"></intext>'
-	)
-}
-
-export {
-	parseText,
-	quizParser,
-	mediaParser,
-	mediaRegex,
-	quizRegex,
-	inTextSoundedWordReplacer
-}
+export { parseText }

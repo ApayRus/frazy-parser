@@ -1,11 +1,64 @@
-import {
-	parseText,
-	quizParser,
-	mediaParser,
-	mediaRegex,
-	quizRegex,
-	inTextSoundedWordReplacer
-} from './intext.js'
+import matchAll from 'string.prototype.matchall'
+import { parseText } from './intext.js'
+
+// THIS REGEXes and PARSERS is just for example
+
+const mediaRegex = new RegExp(
+	/<p>\s*?\[\s*?media\s*?\|\s*?(\S+?)\s*\]\s*?<\/p>/g
+)
+//general quiz both: () and [] for make ids for them
+const quizRegex = new RegExp(/<ul>(\s*<li>[\(\[][\s\S]*?[\]\)][\s\S]+?)<\/ul>/g)
+
+// parsersByType
+
+const quizParser = quizText => {
+	const correctAnswers = []
+	const firstCheckboxRegex = new RegExp(/<ul>\s*?<li>\s*?\[/)
+	const type = quizText.match(firstCheckboxRegex) ? 'multiple' : 'single'
+	const variantRegex = new RegExp(/<li>(.+?)<\/li>/g)
+	const variantsMatch = [...matchAll(quizText, variantRegex)]
+	// inside checkbox or radiobutton
+	const answerSignRegex = new RegExp(/^\s*?[\(\[]([\s\S]*?)[\]\)]\s+?/)
+	const variants = variantsMatch.map((elem, index) => {
+		let [, text] = elem
+		const [, answerSign = ''] = text.match(answerSignRegex)
+		if (answerSign.trim()) {
+			correctAnswers.push(index)
+		}
+		text = text.replace(answerSignRegex, '')
+		return { text }
+	})
+
+	return { variants, correctAnswers, type }
+}
+
+const mediaParser = mediaText => {
+	const mediaRegex = new RegExp(/\[\s*?media\s*?\|\s*?(\S+?)\s*\]/)
+	const mediaMatch = mediaText.match(mediaRegex)
+	const [, path] = mediaMatch
+	return { path }
+}
+
+/**
+ *
+ * @param {string} htmlText - multiline text
+ * @returns {string}
+ * @example
+ * const exampleText = 'There is some text with [[ sounded word ]] or [[sounded phrase | path to file]]'
+ * convertInTextShortcutIntoTags(exampleText)
+ * // 'There is some text with <inText text="sounded word" path="" /> or <inText text="sounded phrase" path="path to file" />'
+ * // () ===> <inText text="some text" path="path to file" />
+ */
+const inTextSoundedWordReplacer = htmlText => {
+	// [[ sounded word ]] or [[sounded phrase | path to file]]
+	const inTextSoundedWordRegex = new RegExp(
+		/\[\[\s*(.+?)\s*(\|\s*(.+?)\s*)?\]\]/gm
+	)
+	return htmlText.replace(
+		inTextSoundedWordRegex,
+		'<intext text="$1" path="$3"></intext>'
+	)
+}
 
 const html = `<p>Question 1. Multiple choice </p>
 <ul>

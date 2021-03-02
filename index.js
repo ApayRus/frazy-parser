@@ -1,10 +1,2 @@
 export { parseSubs } from './parsers/subtitles.js'
-
-export {
-	parseText,
-	quizParser,
-	mediaParser,
-	mediaRegex,
-	quizRegex,
-	inTextSoundedWordReplacer
-} from './parsers/intext.js'
+export { parseText } from './parsers/intext.js'
