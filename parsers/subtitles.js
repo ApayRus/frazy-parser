@@ -146,7 +146,7 @@ const parsePlainText = text => {
 	const rowsArray = text.split('\n')
 	const obj = rowsArray.reduce((prev, item, index) => {
 		const rowIndex = prefixedIndex(index + 1)
-		return { ...prev, [rowIndex]: { body: [{ text }] } }
+		return { ...prev, [rowIndex]: { body: [{ text: item }] } }
 	}, {})
 	return obj
 }
