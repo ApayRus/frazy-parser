@@ -25,11 +25,15 @@ const audacityCueTemplate = new RegExp(
  */
 const parseTimecode = timecode => {
 	if (!timecode) return null
+	const number = Number(timecode)
+	if (number >= 0) return number
+	if (typeof timecode === 'string') {
 	const timeArray = timecode.replace(',', '.').split(':').reverse()
-	//reverse because 'hours' is optinal and good if it at the end of array
+		//reverse because 'hours' is optional and good if it at the end of array
 	const [seconds, minutes, hours = '0'] = timeArray
 	const timeNumber = +seconds + +minutes * 60 + +hours * 60 * 60
 	return timeNumber
+}
 }
 
 const extractVoiceTags = cueText => {
