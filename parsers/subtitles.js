@@ -1,6 +1,21 @@
 import matchAll from 'string.prototype.matchall'
 import { prefixedIndex } from '../utils.js'
 
+// CUE TEMPLATES
+const srtCueTemplate = new RegExp(
+	/^(\d+\s+)(\d\d:\d\d:\d\d,\d\d\d)\s+-->\s+(\d\d:\d\d:\d\d,\d\d\d)\s+([\s\S]+?)[\n\r]{2}/,
+	'mg'
+)
+
+const vttCueTemplate = new RegExp(
+	/^(.+[\n\r])?(\d?\d?:?\d\d:\d\d\.\d\d\d)\s+-->\s+(\d?\d?:?\d\d:\d\d\.\d\d\d).*?[\n\r]([\s\S]+?)[\n\r]{2}/,
+	'mg'
+)
+const audacityCueTemplate = new RegExp(
+	/^(\d+?(\.\d+?)?)\s+?(\d+?\.?(\.\d+?)?)\s+?(.+)/,
+	'mg'
+)
+
 /**
  * works for SRT, VTT, ASS
  * @param {string} timecode like `00:00:00.500` or `00:00.500` (hours is optional)
@@ -67,14 +82,11 @@ const extractVoiceTags = cueText => {
 
 const checkSubsType = text => {
 	const vttAttribute = new RegExp(/^WEBVTT/)
-	const srtAttribute = new RegExp(/^\d\s+\d\d:\d\d:\d\d,\d\d\d/)
-	const audacityAttribute = new RegExp(
-		/^(\d+?(\.\d+?)?)\s+?(\d+?\.?(\.\d+?)?)\s+?(.+)/
-	)
 
-	const { length: vttMatch } = text.match(vttAttribute) || []
-	const { length: srtMatch } = text.match(srtAttribute) || []
-	const { length: audacityMatch } = text.match(audacityAttribute) || []
+	const { length: vttMatch } =
+		text.match(vttAttribute) || text.match(vttCueTemplate) || []
+	const { length: srtMatch } = text.match(srtCueTemplate) || []
+	const { length: audacityMatch } = text.match(audacityCueTemplate) || []
 
 	if (vttMatch) return 'vtt'
 	if (srtMatch) return 'srt'
@@ -89,16 +101,6 @@ Difference srt|vtt cue template:
 // hours is optional | required
 // milliseconds delimiter is dot | comma 
 */
-
-	const srtCueTemplate = new RegExp(
-		/^(\d+\s+)(\d\d:\d\d:\d\d,\d\d\d)\s+-->\s+(\d\d:\d\d:\d\d,\d\d\d)\s+([\s\S]+?)[\n\r]{2}/,
-		'mg'
-	)
-
-	const vttCueTemplate = new RegExp(
-		/^(.+[\n\r])?(\d?\d?:?\d\d:\d\d\.\d\d\d)\s+-->\s+(\d?\d?:?\d\d:\d\d\.\d\d\d).*?[\n\r]([\s\S]+?)[\n\r]{2}/,
-		'mg'
-	)
 
 	const cueRegexTemplate =
 		checkSubsType(subsText) === 'srt' ? srtCueTemplate : vttCueTemplate
@@ -121,10 +123,6 @@ Difference srt|vtt cue template:
     then we use spaces also as separator 
 */
 const parseAudacity = subsText => {
-	const audacityCueTemplate = new RegExp(
-		/^(\d+?(\.\d+?)?)\s+?(\d+?\.?(\.\d+?)?)\s+?(.+)/,
-		'mg'
-	)
 	const matchArray = [...matchAll(subsText, audacityCueTemplate)]
 	return matchArray.reduce((prevItem, curItem, curIndex) => {
 		let [, start, , end, , body] = curItem
