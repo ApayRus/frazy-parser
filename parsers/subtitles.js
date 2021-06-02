@@ -7,8 +7,8 @@ import { prefixedIndex } from '../utils.js'
 const cueTemplates = {
 	srt: /^(\d+\s+)(\d\d:\d\d:\d\d,\d\d\d)\s+-->\s+(\d\d:\d\d:\d\d,\d\d\d)\s+([\s\S]+?)[\n\r]{2}/gm,
 	vtt: /^(.+[\n\r])?(\d?\d?:?\d\d:\d\d\.\d\d\d)\s+-->\s+(\d?\d?:?\d\d:\d\d\.\d\d\d).*?[\n\r]([\s\S]+?)[\n\r]{2}/gm,
-	ass: /(\d?\d:\d\d:\d\d\.\d\d),(\d?\d:\d\d:\d\d\.\d\d) (.+?)/gm,
-	audacity: /^(\d+?(\.\d+?)?)\s+?(\d+?\.?(\.\d+?)?)\s+?(.+)/gm // a little tricky, because floating part is optional
+	ass: /^(\d?\d:\d\d:\d\d\.\d\d),(\d?\d:\d\d:\d\d\.\d\d) (.+?)$/gm,
+	audacity: /^(\d+?(\.\d+?)?)\s+?(\d+?\.?(\.\d+?)?)\s+?(.+)$/gm // a little tricky, because floating part is optional
 }
 
 const positionInCueTemplate = {
@@ -20,12 +20,12 @@ const positionInCueTemplate = {
 }
 
 const checkSubsType = text => {
-	Object.entries(cueTemplates).forEach(entry => {
-		const [subsType, cueTemplate] = entry
+	for (const subsType in cueTemplates) {
+		const cueTemplate = cueTemplates[subsType]
 		if (text.match(cueTemplate)?.length > 0) {
 			return subsType
 		}
-	})
+	}
 
 	return 'unknown'
 }
@@ -60,22 +60,27 @@ const checkSubsType = text => {
  */
 const parseSubs = (text, extractVoices = true) => {
 	const subsType = checkSubsType(text)
-
 	const indexes = positionInCueTemplate[subsType]
-
 	const arrayOfMatches =
 		subsType === 'unknown'
-			? text.split('\n') // useful for translations to subs, without timing
+			? text.split('\n').map(elem => [elem]) // useful for translations to subs, without timing
 			: [...matchAll(text + '\n\n', cueTemplates[subsType])]
 
 	const subsObject = arrayOfMatches.reduce((prev, item, index) => {
-		const indentifier = item?.[indexes?.indentifier] || ''
+		const identifier = item?.[indexes?.identifier]?.trim() || ''
 		const start = parseTimecode(item?.[indexes?.start])
 		const end = parseTimecode(item?.[indexes?.end])
 		const body = extractVoices
 			? extractVoiceTags(item?.[indexes?.body])
 			: item?.[indexes?.body]
-		return { [prefixedIndex(index + 1)]: { indentifier, start, end, body } }
+		const currentSub = { identifier, start, end, body }
+		if (!identifier) delete currentSub.identifier
+		if (!start) delete currentSub.start
+		if (!end) delete currentSub.end
+		return {
+			...prev,
+			[prefixedIndex(index + 1)]: currentSub
+		}
 	}, {})
 	return subsObject
 }
