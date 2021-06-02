@@ -1,27 +1,84 @@
 import matchAll from 'string.prototype.matchall'
 import { prefixedIndex } from '../utils.js'
 
-// CUE TEMPLATES
-const srtCueTemplate = new RegExp(
-	/^(\d+\s+)(\d\d:\d\d:\d\d,\d\d\d)\s+-->\s+(\d\d:\d\d:\d\d,\d\d\d)\s+([\s\S]+?)[\n\r]{2}/,
-	'mg'
-)
+// cueTemplates play 2 roles:
+// 1) check subs type
+// 2) extract data from it: identifier, start, end, body
+const cueTemplates = {
+	srt: /^(\d+\s+)(\d\d:\d\d:\d\d,\d\d\d)\s+-->\s+(\d\d:\d\d:\d\d,\d\d\d)\s+([\s\S]+?)[\n\r]{2}/gm,
+	vtt: /^(.+[\n\r])?(\d?\d?:?\d\d:\d\d\.\d\d\d)\s+-->\s+(\d?\d?:?\d\d:\d\d\.\d\d\d).*?[\n\r]([\s\S]+?)[\n\r]{2}/gm,
+	ass: /(\d?\d:\d\d:\d\d\.\d\d),(\d?\d:\d\d:\d\d\.\d\d) (.+?)/gm,
+	audacity: /^(\d+?(\.\d+?)?)\s+?(\d+?\.?(\.\d+?)?)\s+?(.+)/gm // a little tricky, because floating part is optional
+}
 
-const vttCueTemplate = new RegExp(
-	/^(.+[\n\r])?(\d?\d?:?\d\d:\d\d\.\d\d\d)\s+-->\s+(\d?\d?:?\d\d:\d\d\.\d\d\d).*?[\n\r]([\s\S]+?)[\n\r]{2}/,
-	'mg'
-)
-// 0.1 3.5 some text - text or tab separated
-const audacityCueTemplate = new RegExp(
-	/^(\d+?(\.\d+?)?)\s+?(\d+?\.?(\.\d+?)?)\s+?(.+)/,
-	'g'
-)
+const positionInCueTemplate = {
+	srt: { identifier: 1, start: 2, end: 3, body: 4 },
+	vtt: { identifier: 1, start: 2, end: 3, body: 4 },
+	audacity: { start: 1, end: 3, body: 5 },
+	ass: { start: 1, end: 2, body: 3 },
+	unknown: { body: 0 }
+}
 
-// 0:00:23.90,0:00:26.60 Some text
-const assCueTemplate = new RegExp(
-	/(\d?\d:\d\d:\d\d\.\d\d),(\d?\d:\d\d:\d\d\.\d\d)/,
-	'g'
-)
+const checkSubsType = text => {
+	Object.entries(cueTemplates).forEach(entry => {
+		const [subsType, cueTemplate] = entry
+		if (text.match(cueTemplate)?.length > 0) {
+			return subsType
+		}
+	})
+
+	return 'unknown'
+}
+
+/**
+ * works for VTT, SRT, Audacity
+ * @param {string} text
+ * @param {boolean} extractVoices - true by default. voice is webvtt <v> tag. 
+ * @returns {object} phrasesObject
+ * @returns {string} phrasesObject.identifier
+ * @returns {number} phrasesObject.start
+ * @returns {number} phrasesObject.end
+ * @returns {object[]} phrasesObject.body - array of objects
+ * @example
+	const phrases = {
+		'001': {
+			identifier: 1,
+			start: 0.2,
+			end: 5.32,
+			body: [
+				{ text: 'bla bla' },
+				{
+					voice: {
+						name: 'Jhon Lenin',
+						classes: ['laud', 'kindly']
+					},
+					text: 'ha ha ha'
+				}
+			]
+		}
+	}
+ */
+const parseSubs = (text, extractVoices = true) => {
+	const subsType = checkSubsType(text)
+
+	const indexes = positionInCueTemplate[subsType]
+
+	const arrayOfMatches =
+		subsType === 'unknown'
+			? text.split('\n') // useful for translations to subs, without timing
+			: [...matchAll(text + '\n\n', cueTemplates[subsType])]
+
+	const subsObject = arrayOfMatches.reduce((prev, item, index) => {
+		const indentifier = item?.[indexes?.indentifier] || ''
+		const start = parseTimecode(item?.[indexes?.start])
+		const end = parseTimecode(item?.[indexes?.end])
+		const body = extractVoices
+			? extractVoiceTags(item?.[indexes?.body])
+			: item?.[indexes?.body]
+		return { [prefixedIndex(index + 1)]: { indentifier, start, end, body } }
+	}, {})
+	return subsObject
+}
 
 /**
  * works for SRT, VTT, ASS
@@ -88,130 +145,6 @@ const extractVoiceTags = cueText => {
 		}
 
 		return [...textBeforeVoiceTags(), ...result, ...textAfterVoiceTags()]
-	}
-}
-
-const checkSubsType = text => {
-	const { length: vttMatch } =
-		text.match(/^WEBVTT/) || text.match(vttCueTemplate) || []
-	const { length: srtMatch } = text.match(srtCueTemplate) || []
-	const { length: audacityMatch } = text.match(audacityCueTemplate) || []
-	const { length: assMatch } = text.match(assCueTemplate) || []
-
-	if (vttMatch) return 'vtt'
-	if (srtMatch) return 'srt'
-	if (audacityMatch) return 'audacity'
-	if (assMatch) return 'ass'
-
-	return 'unknown'
-}
-
-const parseSrtVtt = subsText => {
-	/*
-Difference srt|vtt cue template:
-// identifier is optional | required
-// hours is optional | required
-// milliseconds delimiter is dot | comma 
-*/
-
-	const cueRegexTemplate =
-		checkSubsType(subsText) === 'srt' ? srtCueTemplate : vttCueTemplate
-
-	const matchArray = [...matchAll(subsText + '\n\n', cueRegexTemplate)]
-	return matchArray.reduce((prevItem, curItem, curIndex) => {
-		let [, identifier = '', start, end, body] = curItem
-		identifier = identifier.trim()
-		start = parseTimecode(start)
-		end = parseTimecode(end)
-		body = body.trim()
-		const id = prefixedIndex(curIndex + 1)
-		return { ...prevItem, [id]: { identifier, start, end, body } }
-	}, {})
-}
-/*
-    audacity returns tab separated text
-    but in some cases tabs are replaced to spaces
-    in prettier auto format, for example
-    then we use spaces also as separator 
-*/
-const parseAudacity = subsText => {
-	const matchArray = [...matchAll(subsText, audacityCueTemplate)]
-	return matchArray.reduce((prevItem, curItem, curIndex) => {
-		let [, start, , end, , body] = curItem
-		start = +start
-		end = +end
-		const id = prefixedIndex(curIndex + 1)
-		return { ...prevItem, [id]: { start, end, body } }
-	}, {})
-}
-
-/**
- * gives ids for lines of text
- * useful for translations to subs, without timing
- * @param {string} text
- * @returns {object} - phrases {id:{text}}
- */
-const parsePlainText = text => {
-	if (!text) return {}
-	const rowsArray = text.split('\n')
-	const obj = rowsArray.reduce((prev, item, index) => {
-		const rowIndex = prefixedIndex(index + 1)
-		return { ...prev, [rowIndex]: { body: item } }
-	}, {})
-	return obj
-}
-
-/**
- * works for VTT, SRT, Audacity
- * @param {string} text
- * @param {boolean} extractVoices - true by default. voice is webvtt <v> tag. 
- * @returns {object} phrasesObject
- * @returns {string} phrasesObject.identifier
- * @returns {number} phrasesObject.start
- * @returns {number} phrasesObject.end
- * @returns {object[]} phrasesObject.body - array of objects
- * @example
-	const phrases = {
-		'001': {
-			identifier: 1,
-			start: 0.2,
-			end: 5.32,
-			body: [
-				{ text: 'bla bla' },
-				{
-					voice: {
-						name: 'Jhon Lenin',
-						classes: ['laud', 'kindly']
-					},
-					text: 'ha ha ha'
-				}
-			]
-		}
-	}
- */
-const parseSubs = (text, extractVoices = true) => {
-	const mapTypeParser = {
-		srt: () => parseSrtVtt(text),
-		vtt: () => parseSrtVtt(text),
-		audacity: () => parseAudacity(text),
-		unknown: () => parsePlainText(text)
-	}
-
-	const subsType = checkSubsType(text)
-
-	const phrasesObject = mapTypeParser[subsType]()
-
-	if (!phrasesObject) return null
-
-	if (!extractVoices) return phrasesObject
-	else {
-		Object.entries(phrasesObject).forEach(entry => {
-			const [key, value] = entry
-			let { body } = value // string
-			body = extractVoiceTags(body) //array of objects
-			phrasesObject[key] = { ...value, body }
-		})
-		return phrasesObject
 	}
 }
 
