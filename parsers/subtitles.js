@@ -11,9 +11,16 @@ const vttCueTemplate = new RegExp(
 	/^(.+[\n\r])?(\d?\d?:?\d\d:\d\d\.\d\d\d)\s+-->\s+(\d?\d?:?\d\d:\d\d\.\d\d\d).*?[\n\r]([\s\S]+?)[\n\r]{2}/,
 	'mg'
 )
+// 0.1 3.5 some text - text or tab separated
 const audacityCueTemplate = new RegExp(
 	/^(\d+?(\.\d+?)?)\s+?(\d+?\.?(\.\d+?)?)\s+?(.+)/,
-	'mg'
+	'g'
+)
+
+// 0:00:23.90,0:00:26.60 Some text
+const assCueTemplate = new RegExp(
+	/(\d?\d:\d\d:\d\d\.\d\d),(\d?\d:\d\d:\d\d\.\d\d)/,
+	'g'
 )
 
 /**
@@ -28,12 +35,12 @@ const parseTimecode = timecode => {
 	const number = Number(timecode)
 	if (number >= 0) return number
 	if (typeof timecode === 'string') {
-	const timeArray = timecode.replace(',', '.').split(':').reverse()
+		const timeArray = timecode.replace(',', '.').split(':').reverse()
 		//reverse because 'hours' is optional and good if it at the end of array
-	const [seconds, minutes, hours = '0'] = timeArray
-	const timeNumber = +seconds + +minutes * 60 + +hours * 60 * 60
-	return timeNumber
-}
+		const [seconds, minutes, hours = '0'] = timeArray
+		const timeNumber = +seconds + +minutes * 60 + +hours * 60 * 60
+		return timeNumber
+	}
 }
 
 const extractVoiceTags = cueText => {
@@ -85,16 +92,17 @@ const extractVoiceTags = cueText => {
 }
 
 const checkSubsType = text => {
-	const vttAttribute = new RegExp(/^WEBVTT/)
-
 	const { length: vttMatch } =
-		text.match(vttAttribute) || text.match(vttCueTemplate) || []
+		text.match(/^WEBVTT/) || text.match(vttCueTemplate) || []
 	const { length: srtMatch } = text.match(srtCueTemplate) || []
 	const { length: audacityMatch } = text.match(audacityCueTemplate) || []
+	const { length: assMatch } = text.match(assCueTemplate) || []
 
 	if (vttMatch) return 'vtt'
 	if (srtMatch) return 'srt'
 	if (audacityMatch) return 'audacity'
+	if (assMatch) return 'ass'
+
 	return 'unknown'
 }
 
