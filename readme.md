@@ -33,13 +33,12 @@ import { parseSubs } from 'frazy-parser'
 const phrases = parseSubs(subsText)
 ```
 
-As in vtt, a cue can have several `<v>` tags.
-
 ## Voice tag
 
-In every subs you can put `<v>` tag. It is native only for `vtt`, but we supports it everywhere.
+In any subs type you can use `<v>` tag. It is native only for `vtt`, but we support it for any format.
 
 `0.15 4.38 <v.loud.kindly John Doe> Hi everyone! How are you doing!?`
+
 will be converted to:
 
 ```javascript
@@ -57,6 +56,8 @@ will be converted to:
 	]
 }
 ```
+
+As in a `vtt` format, a cue (phrase) can have several `<v>` tags. In that case you should use it with closing tag `</v>`.
 
 ## Examples of subtitle formats
 
