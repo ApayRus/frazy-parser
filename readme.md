@@ -59,6 +59,14 @@ will be converted to:
 
 As in a `vtt` format, a cue (phrase) can have several `<v>` tags. In that case you should use it with closing tag `</v>`.
 
+## Testing
+
+You can see more examples in `/tests/subtitles` folder. For run tests:
+
+```
+npm test
+```
+
 ## Examples of subtitle formats
 
 ### srt
