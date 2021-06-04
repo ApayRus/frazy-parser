@@ -1,7 +1,7 @@
 import { parseSubs } from '../../parsers/subtitles.js'
 
 const srtExample = `1
-00:00:00,498 --> 00:00:02,827
+00:00:00,000 --> 00:00:02,827
 - Here's what I love most
 about food and diet.
 
@@ -20,7 +20,7 @@ const result = parseSubs(srtExample)
 const expectedOutput = [
 	{
 		identifier: '1',
-		start: 0.498,
+		start: 0,
 		end: 2.827,
 		body: [
 			{

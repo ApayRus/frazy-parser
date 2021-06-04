@@ -44,8 +44,8 @@ const parseSubs = (text, extractVoices = true) => {
 			: elem?.[indexes?.body]
 		const currentSub = { identifier, start, end, body }
 		if (!identifier) delete currentSub.identifier
-		if (!start) delete currentSub.start
-		if (!end) delete currentSub.end
+		if (!start && start !== 0) delete currentSub.start
+		if (!end && end !== 0) delete currentSub.end
 		return currentSub
 	})
 	return subsObject
