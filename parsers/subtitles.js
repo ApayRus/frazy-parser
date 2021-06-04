@@ -23,7 +23,8 @@ const positionInCueTemplate = {
 const checkSubsType = text => {
 	for (const subsType in cueTemplates) {
 		const cueTemplate = cueTemplates[subsType]
-		if (text.match(cueTemplate)?.length > 0) {
+		const match = text.match(cueTemplate) || []
+		if (match.length > 0) {
 			return subsType
 		}
 	}
@@ -36,12 +37,15 @@ const parseSubs = (text, extractVoices = true) => {
 	const arrayOfMatches = [...matchAll(text + '\n\n', cueTemplates[subsType])]
 
 	const subsObject = arrayOfMatches.map(elem => {
-		const identifier = elem?.[indexes?.identifier]?.trim() || ''
-		const start = parseTimecode(elem?.[indexes?.start])
-		const end = parseTimecode(elem?.[indexes?.end])
+		const identifier =
+			indexes.identifier && elem[indexes.identifier]
+				? elem[indexes.identifier].trim()
+				: ''
+		const start = parseTimecode(elem[indexes.start])
+		const end = parseTimecode(elem[indexes.end])
 		const body = extractVoices
-			? extractVoiceTags(elem?.[indexes?.body])
-			: elem?.[indexes?.body]
+			? extractVoiceTags(elem[indexes.body])
+			: elem[indexes.body]
 		const currentSub = { identifier, start, end, body }
 		if (!identifier) delete currentSub.identifier
 		if (!start && start !== 0) delete currentSub.start
