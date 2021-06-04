@@ -1,6 +1,6 @@
 {
 	"name": "frazy-parser",
-	"version": "2.0.1",
+	"version": "2.0.2",
 	"description": "Parser for subtitles in different formats into frazy.me format. Also converter between subtitles types. (srt --> vtt etc)",
 	"main": "index.js",
 	"type": "module",
