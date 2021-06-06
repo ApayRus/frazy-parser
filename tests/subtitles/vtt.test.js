@@ -17,7 +17,7 @@ const result = parseSubs(vttExample)
 
 const expectedOutput = [
 	{
-		id: '1',
+		id: 1,
 		start: 11,
 		end: 13,
 		body: [
@@ -31,7 +31,7 @@ const expectedOutput = [
 		]
 	},
 	{
-		id: '2',
+		id: 2,
 		identifier: 'idExample',
 		start: 13,
 		end: 16,
@@ -47,7 +47,7 @@ const expectedOutput = [
 		]
 	},
 	{
-		id: '3',
+		id: 3,
 		start: 16,
 		end: 18,
 		body: [

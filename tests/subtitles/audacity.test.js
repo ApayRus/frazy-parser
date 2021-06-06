@@ -10,7 +10,7 @@ const result = parseSubs(audacityExample)
 
 const expectedOutput = [
 	{
-		id: '1',
+		id: 1,
 		start: 2.814442,
 		end: 8.240772,
 		body: [
@@ -20,7 +20,7 @@ const expectedOutput = [
 		]
 	},
 	{
-		id: '2',
+		id: 2,
 		start: 8.571256,
 		end: 13.475208,
 		body: [
@@ -30,7 +30,7 @@ const expectedOutput = [
 		]
 	},
 	{
-		id: '3',
+		id: 3,
 		start: 14.519963,
 		end: 19.551845,
 		body: [
@@ -40,7 +40,7 @@ const expectedOutput = [
 		]
 	},
 	{
-		id: '4',
+		id: 4,
 		start: 19.551845,
 		end: 22.174393,
 		body: [
@@ -50,7 +50,7 @@ const expectedOutput = [
 		]
 	},
 	{
-		id: '5',
+		id: 5,
 		start: 22.174393,
 		end: 26.609272,
 		body: [

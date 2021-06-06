@@ -39,7 +39,7 @@ const parseSubs = (text, extractVoices = true) => {
 	const subsObject = arrayOfMatches.map((elem, index) => {
 		// difference between id/identifier: identifier in vtt can be any word, it used for styling in css
 		// id is order number
-		const id = index + 1 + ''
+		const id = index + 1
 		const identifier =
 			indexes.identifier && elem[indexes.identifier]
 				? elem[indexes.identifier].trim()

@@ -10,7 +10,7 @@ const result = parseSubs(assExample)
 
 const expectedOutput = [
 	{
-		id: '1',
+		id: 1,
 		start: 23.9,
 		end: 26.6,
 		body: [
@@ -20,7 +20,7 @@ const expectedOutput = [
 		]
 	},
 	{
-		id: '2',
+		id: 2,
 		start: 27.83,
 		end: 32.03,
 		body: [
@@ -30,7 +30,7 @@ const expectedOutput = [
 		]
 	},
 	{
-		id: '3',
+		id: 3,
 		start: 32.43,
 		end: 41.89,
 		body: [
@@ -40,7 +40,7 @@ const expectedOutput = [
 		]
 	},
 	{
-		id: '4',
+		id: 4,
 		start: 61.15,
 		end: 64.45,
 		body: [
@@ -50,7 +50,7 @@ const expectedOutput = [
 		]
 	},
 	{
-		id: '5',
+		id: 5,
 		start: 65.75,
 		end: 69.85,
 		body: [

@@ -19,7 +19,7 @@ const result = parseSubs(srtExample)
 
 const expectedOutput = [
 	{
-		id: '1',
+		id: 1,
 		identifier: '1',
 		start: 0,
 		end: 2.827,
@@ -30,7 +30,7 @@ const expectedOutput = [
 		]
 	},
 	{
-		id: '2',
+		id: 2,
 		identifier: '2',
 		start: 2.827,
 		end: 6.383,
@@ -41,7 +41,7 @@ const expectedOutput = [
 		]
 	},
 	{
-		id: '3',
+		id: 3,
 		identifier: '3',
 		start: 6.383,
 		end: 9.427,
