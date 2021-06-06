@@ -9,6 +9,7 @@ const result = parseSubs(plainTextExample)
 
 const expectedOutput = [
 	{
+		id: '1',
 		body: [
 			{
 				text: 'line one '
@@ -16,6 +17,7 @@ const expectedOutput = [
 		]
 	},
 	{
+		id: '2',
 		body: [
 			{
 				text: 'line two '
@@ -23,6 +25,7 @@ const expectedOutput = [
 		]
 	},
 	{
+		id: '3',
 		body: [
 			{
 				text: 'line three '
@@ -30,6 +33,7 @@ const expectedOutput = [
 		]
 	},
 	{
+		id: '4',
 		body: [
 			{
 				text: 'line four. '

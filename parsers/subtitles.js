@@ -36,7 +36,10 @@ const parseSubs = (text, extractVoices = true) => {
 	const indexes = positionInCueTemplate[subsType]
 	const arrayOfMatches = [...matchAll(text + '\n\n', cueTemplates[subsType])]
 
-	const subsObject = arrayOfMatches.map(elem => {
+	const subsObject = arrayOfMatches.map((elem, index) => {
+		// difference between id/identifier: identifier in vtt can be any word, it used for styling in css
+		// id is order number
+		const id = index + 1 + ''
 		const identifier =
 			indexes.identifier && elem[indexes.identifier]
 				? elem[indexes.identifier].trim()
@@ -46,7 +49,7 @@ const parseSubs = (text, extractVoices = true) => {
 		const body = extractVoices
 			? extractVoiceTags(elem[indexes.body])
 			: elem[indexes.body]
-		const currentSub = { identifier, start, end, body }
+		const currentSub = { id, identifier, start, end, body }
 		if (!identifier) delete currentSub.identifier
 		if (!start && start !== 0) delete currentSub.start
 		if (!end && end !== 0) delete currentSub.end
