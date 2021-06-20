@@ -67,3 +67,24 @@ export const extractVoiceTags = cueText => {
 		return [...textBeforeVoiceTags(), ...result, ...textAfterVoiceTags()]
 	}
 }
+
+/**
+ * checks is paragraph text is yaml params or not
+ * if not - returns null
+ * if yes - returns object of params
+ *
+ * @param {string} paragraphText
+ */
+export const yamlParams = paragraphText => {
+	const lines = paragraphText.trim().split('\n')
+	const matches = [...paragraphText.matchAll(/^(.+?):\s*(.+?)$/gm)]
+	if (!matches) return null
+	if (matches.length !== lines.length) return null
+
+	const yamlParams = matches.reduce((prev, item) => {
+		const [, key, value] = item
+		return { ...prev, [key]: value }
+	}, {})
+
+	return yamlParams
+}
