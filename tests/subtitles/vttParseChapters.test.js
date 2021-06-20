@@ -5822,100 +5822,110 @@ const result = parseChapters(vttExample)
 
 const expectedOutput = [
 	{
-		parsedChapter: {
-			title: '1. Prehistory from Gramma',
-			description: 'Gramma tells a legend about how the World was created.',
-			start: 51
-		}
+		title: '1. Prehistory from Gramma',
+		description: 'Gramma tells a legend about how the World was created.',
+		start: 51
 	},
 	{
-		parsedChapter: { title: "2. Moana finds Te Fiti's heart", start: 294 }
+		title: "2. Moana finds Te Fiti's heart",
+		start: 294
 	},
 	{
-		parsedChapter: { title: '3. Song of the village of Motunui', start: 476 }
+		title: '3. Song of the village of Motunui',
+		start: 476
 	},
 	{
-		parsedChapter: {
-			title: '4. Father shows the mountain of leaders',
-			start: 613
-		}
+		title: '4. Father shows the mountain of leaders',
+		start: 613
 	},
 	{
-		parsedChapter: { title: '5. Song about Home (Island)', start: 672 }
+		title: '5. Song about Home (Island)',
+		start: 672
 	},
 	{
-		parsedChapter: { title: '6. Moana solves village problems', start: 720 }
+		title: '6. Moana solves village problems',
+		start: 720
 	},
-	{ parsedChapter: { title: '7. Story about the father', start: 905 } },
-	{ parsedChapter: { title: '8. Song: "Who am I"', start: 977 } },
+	{ title: '7. Story about the father', start: 905 },
+	{ title: '8. Song: "Who am I"', start: 977 },
 	{
-		parsedChapter: { title: '9. Moana swam over the reef', start: 1121 }
-	},
-	{
-		parsedChapter: { title: '10. Grandma shows the cave of ships', start: 1167 }
-	},
-	{ parsedChapter: { title: '11. Song of the sailors', start: 1411 } },
-	{
-		parsedChapter: {
-			title: '12. Grandma tells how to remove the curse',
-			start: 1560
-		}
-	},
-	{ parsedChapter: { title: '13. Village Council', start: 1674 } },
-	{
-		parsedChapter: { title: "14. Grandmother's last testament", start: 1748 }
+		title: '9. Moana swam over the reef',
+		start: 1121
 	},
 	{
-		parsedChapter: { title: '15. The song "The Ocean is Calling"', start: 1846 }
+		title: '10. Grandma shows the cave of ships',
+		start: 1167
+	},
+	{ title: '11. Song of the sailors', start: 1411 },
+	{
+		title: '12. Grandma tells how to remove the curse',
+		start: 1560
+	},
+	{ title: '13. Village Council', start: 1674 },
+	{
+		title: "14. Grandmother's last testament",
+		start: 1748
 	},
 	{
-		parsedChapter: { title: '16. Moana is looking for Maui', start: 1932 }
+		title: '15. The song "The Ocean is Calling"',
+		start: 1846
 	},
 	{
-		parsedChapter: { title: '17. First meeting with Maui', start: 2109 }
-	},
-	{ parsedChapter: { title: '18. Song of Maui', start: 2310 } },
-	{ parsedChapter: { title: '19. Maui steals a boat', start: 2460 } },
-	{
-		parsedChapter: { title: '20. Meeting with the Kakamors', start: 2695 }
+		title: '16. Moana is looking for Maui',
+		start: 1932
 	},
 	{
-		parsedChapter: { title: '21. Moana and Maui agreed', start: 2947 }
+		title: '17. First meeting with Maui',
+		start: 2109
 	},
-	{ parsedChapter: { title: "22. Moana's Nightmare", start: 3198 } },
-	{ parsedChapter: { title: '23. Tamatoa Island', start: 3248 } },
+	{ title: '18. Song of Maui', start: 2310 },
+	{ title: '19. Maui steals a boat', start: 2460 },
 	{
-		parsedChapter: { title: '24. Lalatai Monster World', start: 3441 }
-	},
-	{ parsedChapter: { title: '25. Song of Tamatoa', start: 3688 } },
-	{ parsedChapter: { title: '26. Escape from Tamatoa', start: 3878 } },
-	{ parsedChapter: { title: '26. Hook training', start: 3942 } },
-	{ parsedChapter: { title: '28. Meeting with Te Ka', start: 4385 } },
-	{ parsedChapter: { title: '29. Cracked hook', start: 4535 } },
-	{
-		parsedChapter: {
-			title: '30. Meeting with the ghost of grandmother',
-			start: 4679
-		}
-	},
-	{ parsedChapter: { title: "31. Granny's Last Song", start: 4798 } },
-	{
-		parsedChapter: { title: '32. Moana swims alone to Te Ka', start: 4955 }
+		title: '20. Meeting with the Kakamors',
+		start: 2695
 	},
 	{
-		parsedChapter: { title: '33. Second meeting with Te Ka', start: 5113 }
+		title: '21. Moana and Maui agreed',
+		start: 2947
+	},
+	{ title: "22. Moana's Nightmare", start: 3198 },
+	{ title: '23. Tamatoa Island', start: 3248 },
+	{
+		title: '24. Lalatai Monster World',
+		start: 3441
+	},
+	{ title: '25. Song of Tamatoa', start: 3688 },
+	{ title: '26. Escape from Tamatoa', start: 3878 },
+	{ title: '26. Hook training', start: 3942 },
+	{ title: '28. Meeting with Te Ka', start: 4385 },
+	{ title: '29. Cracked hook', start: 4535 },
+	{
+		title: '30. Meeting with the ghost of grandmother',
+		start: 4679
+	},
+	{ title: "31. Granny's Last Song", start: 4798 },
+	{
+		title: '32. Moana swims alone to Te Ka',
+		start: 4955
 	},
 	{
-		parsedChapter: { title: "34. Moana's Song of Te Fiti", start: 5325 }
+		title: '33. Second meeting with Te Ka',
+		start: 5113
 	},
 	{
-		parsedChapter: { title: "35. The Return of Te Fiti's Heart", start: 5410 }
+		title: "34. Moana's Song of Te Fiti",
+		start: 5325
 	},
-	{ parsedChapter: { title: '36. The Way Home', start: 5568 } },
-	{ parsedChapter: { title: '37. Back at home', start: 5655 } },
-	{ parsedChapter: { title: '38. Song of the Mariners', start: 5696 } },
 	{
-		parsedChapter: { title: '39. The Last Words of Tamatoa', start: 5779 }
+		title: "35. The Return of Te Fiti's Heart",
+		start: 5410
+	},
+	{ title: '36. The Way Home', start: 5568 },
+	{ title: '37. Back at home', start: 5655 },
+	{ title: '38. Song of the Mariners', start: 5696 },
+	{
+		title: '39. The Last Words of Tamatoa',
+		start: 5779
 	}
 ]
 

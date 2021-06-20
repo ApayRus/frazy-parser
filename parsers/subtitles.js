@@ -73,7 +73,7 @@ const parseChapters = text => {
 		end = parseTimecode(end)
 		if (start) parsedChapter.start = start
 		if (end) parsedChapter.end = end
-		return { parsedChapter }
+		return { ...parsedChapter }
 	})
 	return chapters
 }
