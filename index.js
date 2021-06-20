@@ -1,2 +1,2 @@
-export { parseSubs } from './parsers/subtitles.js'
+export { parseSubs, parseChapters } from './parsers/subtitles.js'
 export { parseText } from './parsers/intext.js'

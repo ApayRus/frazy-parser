@@ -1,5 +1,6 @@
 import matchAll from 'string.prototype.matchall'
-import { parseTimecode, extractVoiceTags } from './utils.js'
+import { parseTimecode, extractVoiceTags, yamlParams } from './utils.js'
+
 /* 
 cueTemplates play 2 roles:
 1) check subs type
@@ -58,4 +59,23 @@ const parseSubs = (text, extractVoices = true) => {
 	return subsObject
 }
 
-export { parseSubs, checkSubsType }
+// vtt supports comments, that is lines begin from NOTE
+// we use them to put chapters info inside subs file
+// for examples look at tests/subtitles/vttParseChapters.test.js
+const parseChapters = text => {
+	const vttChapterTemplate = /^note chapter\s*[\n\r]([\s\S]+?)[\n\r]{2}/gim
+	const chaptersMatch = [...text.matchAll(vttChapterTemplate)]
+	const chapters = chaptersMatch.map(elem => {
+		const [, chapterText] = elem
+		const parsedChapter = yamlParams(chapterText)
+		let { start, end } = parsedChapter
+		start = parseTimecode(start)
+		end = parseTimecode(end)
+		if (start) parsedChapter.start = start
+		if (end) parsedChapter.end = end
+		return { parsedChapter }
+	})
+	return chapters
+}
+
+export { parseSubs, checkSubsType, parseChapters }
