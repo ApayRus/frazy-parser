@@ -20,6 +20,23 @@ export const parseTimecode = timecode => {
 	}
 }
 
+/**
+ *
+ * @param {string} inputSeconds
+ * @example
+ * formatSecondsToTime(225) // "3:45"
+ */
+export const formatSecondsToTime = inputSeconds => {
+	let totalSeconds = +inputSeconds.toFixed(0)
+	const hours = Math.floor(totalSeconds / 3600)
+	const hoursString = hours ? hours + ':' : ''
+	totalSeconds %= 3600
+	const minutes = Math.floor(totalSeconds / 60)
+	const seconds = totalSeconds % 60
+	const secondsString = seconds.toString().padStart(2, '0')
+	return `${hoursString}${minutes}:${secondsString}`
+}
+
 export const extractVoiceTags = cueText => {
 	const voiceRegex = new RegExp(/<v(\S+?)?\s+?(.+?)>([\s\S]+?)(<\/v>|$)/g)
 	const matches = [...matchAll(cueText, voiceRegex)]
