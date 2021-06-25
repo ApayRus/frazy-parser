@@ -37,6 +37,22 @@ export const formatSecondsToTime = inputSeconds => {
 	return `${hoursString}${minutes}:${secondsString}`
 }
 
+export const findCurrentPhraseNum = (phrases, time) => {
+	const findIndex = (array, time) => {
+		return (
+			array.findIndex((elem, index, array) => {
+				const { end: thisEnd } = elem
+				const { end: nextEnd } = array[index + 1] || Infinity
+				return time >= thisEnd && time <= nextEnd
+			}) + 1
+		)
+	}
+
+	const findedIndex = findIndex(phrases, time)
+
+	return findedIndex ? findedIndex : phrases.length - 1
+}
+
 export const extractVoiceTags = cueText => {
 	const voiceRegex = new RegExp(/<v(\S+?)?\s+?(.+?)>([\s\S]+?)(<\/v>|$)/g)
 	const matches = [...matchAll(cueText, voiceRegex)]
