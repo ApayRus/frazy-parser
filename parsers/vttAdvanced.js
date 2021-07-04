@@ -10,9 +10,8 @@ const vttChapterTemplate = /^note chapter\s*[\n\r]([\s\S]+?)[\n\r]{2}/gim
 
 const vttCommentTemplate = /^note comment\s*[\n\r]([\s\S]+?)[\n\r]{2}/gim
 
-const parseVttCueMatchElem = (elem, index, extractVoices = true) => {
+const parseVttCueMatchElem = (elem, id, extractVoices = true) => {
 	const indexes = { identifier: 1, start: 2, end: 3, body: 4 }
-	const id = index + 1
 	const identifier =
 		indexes.identifier && elem[indexes.identifier]
 			? elem[indexes.identifier].trim()
@@ -78,7 +77,8 @@ const parseVtt = text => {
 	// all regex templates are 'gmi'
 	// global => then we use matchAll
 	// multiline => then we add '\n\n'
-	return textArray.map((elem, index) => {
+	let cueId = 0
+	return textArray.map(elem => {
 		let [matchElem] = [...matchAll(elem + '\n\n', vttInfoTemplate)]
 		if (matchElem) {
 			return { type: 'info', ...parseInfoMatchElem(matchElem) }
@@ -91,7 +91,8 @@ const parseVtt = text => {
 
 		;[matchElem] = [...matchAll(elem + '\n\n', cueTemplates.vtt)]
 		if (matchElem) {
-			return { type: 'cue', ...parseVttCueMatchElem(matchElem, index) }
+			cueId++
+			return { type: 'cue', ...parseVttCueMatchElem(matchElem, cueId) }
 		}
 
 		;[matchElem] = [...matchAll(elem + '\n\n', vttCommentTemplate)]

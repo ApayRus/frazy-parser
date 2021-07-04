@@ -71,7 +71,7 @@ const expectedOutput = [
 	},
 	{
 		type: 'cue',
-		id: 3,
+		id: 1,
 		identifier: '1',
 		start: 55.14,
 		end: 56.683,
@@ -83,7 +83,7 @@ const expectedOutput = [
 	},
 	{
 		type: 'cue',
-		id: 4,
+		id: 2,
 		identifier: '2',
 		start: 56.85,
 		end: 59.686,
@@ -95,7 +95,7 @@ const expectedOutput = [
 	},
 	{
 		type: 'cue',
-		id: 5,
+		id: 3,
 		identifier: '3',
 		start: 59.853,
 		end: 63.815,
@@ -111,7 +111,7 @@ const expectedOutput = [
 	},
 	{
 		type: 'cue',
-		id: 7,
+		id: 4,
 		identifier: '4',
 		start: 63.982,
 		end: 65.81700000000001,
@@ -123,7 +123,7 @@ const expectedOutput = [
 	},
 	{
 		type: 'cue',
-		id: 8,
+		id: 5,
 		identifier: '5',
 		start: 66.443,
 		end: 70.196,
