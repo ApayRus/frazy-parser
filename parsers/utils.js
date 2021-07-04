@@ -121,3 +121,61 @@ export const yamlParams = paragraphText => {
 
 	return yamlParams
 }
+
+export const parseYamlParams = text => {
+	const paramTemplate = /^(.+?):\s*(.+?)$/
+	const matches = [...text.matchAll(new RegExp(paramTemplate, 'gm'))]
+	if (!matches) return null // it is not params text
+
+	const paramsObject = {}
+	const linesArray = text?.split('\n')
+
+	let parentIntend = 0
+	let nextIntend = 0
+	let parentKey = ''
+
+	linesArray.forEach((line, index, linesArray) => {
+		const getIntendOfLine = index => {
+			return linesArray?.[index]?.match(/^\s+/)?.[0]?.length || 0
+		}
+		const intend = getIntendOfLine(index) // current line
+		nextIntend = getIntendOfLine(index + 1) || 0
+		const paramMatch = line.match(paramTemplate)
+
+		if (!paramMatch && parentKey) {
+			// we have text line, and should put it to prev parent key
+			const prevText = paramsObject[parentKey] || ''
+			const isNotLastLine = intend === nextIntend
+			const lastSymbol = isNotLastLine ? '\n' : ''
+			paramsObject[parentKey] = prevText + line?.trim() + lastSymbol
+		}
+		let [, paramKey, paramValue] = paramMatch || []
+		paramKey = paramKey?.trim()
+		paramValue = paramValue?.trim()
+
+		if (paramKey && paramValue && !parentKey) {
+			// whole line is a 1-st level param
+			paramsObject[paramKey] = paramValue
+		}
+		if (paramKey && paramValue && parentKey) {
+			// array of params for parent key
+			const prevArray = paramsObject[parentKey] || []
+			const newValue = { [paramKey]: paramValue }
+			prevArray.push(newValue)
+			paramsObject[parentKey] = prevArray
+		}
+		if (paramKey && !paramValue) {
+			// we have a key, but haven't value => it is parent key for next lines
+			parentKey = paramKey
+			parentIntend = intend
+		}
+
+		if (nextIntend < intend) {
+			// we had parentKey on prev step, but now should clear it because of intend
+			parentKey = ''
+			parentIntend = 0
+		}
+	})
+
+	return paramsObject
+}

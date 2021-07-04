@@ -1,4 +1,4 @@
-import { parseChapters } from '../../parsers/subtitles.js'
+import { parseChapters } from '../../parsers/vttAdvanced'
 
 const vttExample = `WEBVTT
 

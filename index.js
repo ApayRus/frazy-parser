@@ -1,7 +1,9 @@
-export { parseSubs, parseChapters } from './parsers/subtitles.js'
+export { parseSubs } from './parsers/subtitles.js'
+export { parseChapters, parseVtt } from './parsers/vttAdvanced.js'
 export {
 	formatSecondsToTime,
 	parseTimecode,
-	findCurrentPhraseNum
+	findCurrentPhraseNum,
+	parseYamlParams
 } from './parsers/utils.js'
 export { parseText } from './parsers/intext.js'
