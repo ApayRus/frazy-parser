@@ -118,7 +118,11 @@ Delimiter can be space or tab.
 
 ### ass
 
-Only the simplest scheme is supported: `start,end text`
+Only two simplest schemes are supported:
+
+- `Dialogue: 0,0:00:00.80,0:00:02.38,Default,,0,0,0,,text of cue`
+
+- `0:00:00.80,0:00:02.38 text of cue`
 
 ```
 0:00:23.90,0:00:26.60 line one
@@ -185,7 +189,7 @@ parseVtt(vttExample)
 You'll get the output:
 
 ```javascript
-[
+;[
 	{
 		type: 'info',
 		topTitle: 'TOPTITLE',
