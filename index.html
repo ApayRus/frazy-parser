@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<script src="./build.js"></script>
+	<style>
+		#output-json {
+			display: inline-block;
+		}
+
+		#output-wrapper {
+			display: flex;
+		}
+
+		#subs-type {
+			/* border: 1px solid blue; */
+			background-color: yellow;
+			padding: 3px;
+		}
+	</style>
+</head>
+
+<body>
+	<div>
+		<p>Please, read about <a href="https://github.com/aparus/frazy-parser#supported-formats">supported formats</a>.
+		</p>
+		<input type="file" id="subsFile">
+		<p>or paste text:</p>
+		<textarea id="text-input"></textarea>
+
+		<p>Type of subs: <span id="subs-type"></span></p>
+
+		<div id="output-wrapper">
+			<pre id="output-json"> </pre>
+		</div>
+	</div>
+
+	<script>
+		// console.log('parseSubs')
+		const fileElement = document.getElementById('subsFile')
+		const textInputElement = document.getElementById('text-input')
+		const subsTypeElement = document.getElementById('subs-type')
+
+		const outputJsonElement = document.getElementById('output-json')
+
+		const parseSubsAndOutput = text => {
+			const json = frazyParser.parseSubs(text)
+			outputJsonElement.innerText = JSON.stringify(json, null, '\t')
+			subsTypeElement.innerText = frazyParser.checkSubsType(text)
+		}
+
+		fileElement.addEventListener('change', (event) => {
+			const fileToLoad = event.target.files[0]
+			const fileReader = new FileReader()
+			fileReader.addEventListener('load', (fileLoadedEvent) => {
+				const text = fileLoadedEvent.target.result;
+				parseSubsAndOutput(text)
+			})
+			fileReader.readAsText(fileToLoad, "UTF-8");
+		})
+
+		textInputElement.addEventListener('input', (event) => {
+			const text = event.target.value
+			parseSubsAndOutput(text)
+		})
+	</script>
+</body>
+
+</html>
