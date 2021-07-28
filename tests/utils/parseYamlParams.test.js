@@ -1,4 +1,4 @@
-import { parseYamlParams } from '../../parsers/utils.js'
+import { parseYamlParams } from '../../src/utils.js'
 
 const input = `title: Moana
 description: 

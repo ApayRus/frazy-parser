@@ -1,4 +1,4 @@
-import { parseTimecode } from '../../parsers/utils.js'
+import { parseTimecode } from '../../src/utils.js'
 
 test('parseTimecode hh:mm:ss.mls', () => {
 	expect(parseTimecode('12:34:56.789')).toEqual(45296.789)

@@ -1,4 +1,4 @@
-import { extractVoiceTags } from '../../parsers/utils.js'
+import { extractVoiceTags } from '../../src/utils.js'
 
 const input = [
 	`text without voice`,

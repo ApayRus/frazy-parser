@@ -1,4 +1,4 @@
-import { parseSubs } from '../../parsers/subtitles.js'
+import { parseSubs } from '../../src/subtitles.js'
 
 const assExample = `0:00:23.90,0:00:26.60 line one 
 0:00:27.83,0:00:32.03 line two 

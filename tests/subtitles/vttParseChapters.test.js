@@ -1,4 +1,4 @@
-import { parseChapters } from '../../parsers/vttAdvanced'
+import { parseChapters } from '../../src/vttAdvanced'
 
 const vttExample = `WEBVTT
 

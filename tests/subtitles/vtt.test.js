@@ -1,4 +1,4 @@
-import { parseSubs } from '../../parsers/subtitles.js'
+import { parseSubs } from '../../src/subtitles.js'
 
 const vttExample = `WEBVTT
 

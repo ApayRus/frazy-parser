@@ -1,4 +1,4 @@
-import { formatSecondsToTime } from '../../parsers/utils.js'
+import { formatSecondsToTime } from '../../src/utils.js'
 
 test('formatSecondsToTime hh:mm:ss.mls', () => {
 	expect(formatSecondsToTime(12)).toEqual('0:12')

@@ -1,4 +1,4 @@
-import { findCurrentPhraseNum } from '../../parsers/utils.js'
+import { findCurrentPhraseNum } from '../../src/utils.js'
 
 const phrases = [
 	{ id: '000', start: 0, end: 0, text: '' },

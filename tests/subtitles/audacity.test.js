@@ -1,4 +1,4 @@
-import { parseSubs } from '../../parsers/subtitles.js'
+import { parseSubs } from '../../src/subtitles.js'
 
 const audacityExample = `2.814442	8.240772	first line 1
 8.571256	13.475208	second line 2

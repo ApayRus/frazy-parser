@@ -1,9 +1,9 @@
-export { parseSubs } from './parsers/subtitles.js'
-export { parseChapters, parseVtt } from './parsers/vttAdvanced.js'
+export { parseSubs, checkSubsType } from './src/subtitles.js'
+export { parseChapters, parseVtt } from './src/vttAdvanced.js'
 export {
 	formatSecondsToTime,
 	parseTimecode,
 	findCurrentPhraseNum,
 	parseYamlParams
-} from './parsers/utils.js'
-export { parseText } from './parsers/intext.js'
+} from './src/utils.js'
+export { parseText } from './src/intext.js'

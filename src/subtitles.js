@@ -13,7 +13,7 @@ cueTemplates play 2 roles:
 export const cueTemplates = {
 	srt: /^(\d+\s+)(\d\d:\d\d:\d\d,\d\d\d)\s+-->\s+(\d\d:\d\d:\d\d,\d\d\d)\s+([\s\S]+?)[\n\r]{2}/gm,
 	vtt: /^(.+[\n\r])?(\d?\d?:?\d\d:\d\d\.\d\d\d)\s+-->\s+(\d?\d?:?\d\d:\d\d\.\d\d\d).*?[\n\r]([\s\S]+?)[\n\r]{2}/gm,
-	ass: /^(\d?\d:\d\d:\d\d\.\d\d),(\d?\d:\d\d:\d\d\.\d\d) (.+?)$/gm,
+	ass: /^(Dialogue: 0,)?(\d?\d:\d\d:\d\d\.\d\d),(\d?\d:\d\d:\d\d\.\d\d)(,Default,,0,0,0,,)? ?(.+?)$/gm,
 	audacity: /^(\d+?(\.\d+?)?)\s+?(\d+?\.?(\.\d+?)?)\s+?(.+)$/gm, // a little tricky, because floating part is optional
 	unknown: /^(.+)$/gm
 }
@@ -22,7 +22,7 @@ const positionInCueTemplate = {
 	srt: { identifier: 1, start: 2, end: 3, body: 4 },
 	vtt: { identifier: 1, start: 2, end: 3, body: 4 },
 	audacity: { start: 1, end: 3, body: 5 },
-	ass: { start: 1, end: 2, body: 3 },
+	ass: { start: 2, end: 3, body: 5 },
 	unknown: { body: 0 }
 }
 

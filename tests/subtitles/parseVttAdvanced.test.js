@@ -1,4 +1,4 @@
-import { parseVtt } from '../../parsers/vttAdvanced'
+import { parseVtt } from '../../src/vttAdvanced'
 
 const input = `WEBVTT - TOPTITLE
 title: Moana
