@@ -2,7 +2,7 @@
 
 Identifies a subtitle type by its text and converts it to a JavaScript object.
 
-Try [Playground](https://aparus.github.io/frazy-parser/).
+Try [Playground](https://apayrus.github.io/frazy-parser/).
 
 ## Supported formats:
 
