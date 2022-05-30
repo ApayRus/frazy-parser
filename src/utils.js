@@ -128,7 +128,7 @@ export const parseYamlParams = text => {
 	if (!matches) return null // it is not params text
 
 	const paramsObject = {}
-	const linesArray = text?.split('\n')
+	const linesArray = text ? text.split('\n') : []
 
 	let parentIntend = 0
 	let nextIntend = 0
