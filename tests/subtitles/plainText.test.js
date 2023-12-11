@@ -3,7 +3,8 @@ import { parseSubs } from '../../src/subtitles.js'
 const plainTextExample = `line one 
 line two 
 line three 
-line four. `
+
+line five. `
 
 const result = parseSubs(plainTextExample)
 
@@ -36,7 +37,15 @@ const expectedOutput = [
 		id: 4,
 		body: [
 			{
-				text: 'line four. '
+				text: ''
+			}
+		]
+	},
+	{
+		id: 5,
+		body: [
+			{
+				text: 'line five. '
 			}
 		]
 	}

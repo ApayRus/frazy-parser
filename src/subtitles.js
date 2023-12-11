@@ -40,6 +40,17 @@ const checkSubsType = text => {
 const parseSubs = (text, extractVoices = true) => {
 	const subsType = checkSubsType(text)
 	const indexes = positionInCueTemplate[subsType]
+
+	if (subsType === 'unknown') {
+		// parse as plain text
+		const textArray = text.split('\n')
+		const subsObject = textArray.map((elem, index) => {
+			return { id: index + 1, body: [{ text: elem }] }
+		})
+
+		return subsObject
+	}
+
 	const arrayOfMatches = [...matchAll(text + '\n\n', cueTemplates[subsType])]
 
 	const subsObject = arrayOfMatches.map((elem, index) => {
