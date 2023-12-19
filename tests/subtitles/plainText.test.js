@@ -1,7 +1,7 @@
 import { parseSubs } from '../../src/subtitles.js'
 
-const plainTextExample = `line one 
-line two 
+const plainTextExample = `<v voice1>line one 
+<v voice2>line two 
 line three 
 
 line five. `
@@ -13,7 +13,8 @@ const expectedOutput = [
 		id: 1,
 		body: [
 			{
-				text: 'line one '
+				voice: { name: 'voice1', classes: [] },
+				text: 'line one'
 			}
 		]
 	},
@@ -21,7 +22,8 @@ const expectedOutput = [
 		id: 2,
 		body: [
 			{
-				text: 'line two '
+				voice: { name: 'voice2', classes: [] },
+				text: 'line two'
 			}
 		]
 	},

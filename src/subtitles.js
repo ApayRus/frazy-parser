@@ -45,7 +45,8 @@ const parseSubs = (text, extractVoices = true) => {
 		// parse as plain text
 		const textArray = text.split('\n')
 		const subsObject = textArray.map((elem, index) => {
-			return { id: index + 1, body: [{ text: elem }] }
+			const body = extractVoiceTags(elem)
+			return { id: index + 1, body }
 		})
 
 		return subsObject
