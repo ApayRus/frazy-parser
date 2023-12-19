@@ -53,7 +53,7 @@ export const findCurrentPhraseNum = (phrases, time) => {
 	return findedIndex ? findedIndex : phrases.length - 1
 }
 
-export const extractVoiceTags = cueText => {
+export const extractVoiceTags = (cueText = '') => {
 	const voiceRegex = new RegExp(/<v(\S+?)?\s+?(.+?)>([\s\S]+?)(<\/v>|$)/g)
 	const matches = [...matchAll(cueText, voiceRegex)]
 	if (!matches.length) return [{ text: cueText }]

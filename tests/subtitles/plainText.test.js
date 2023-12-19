@@ -1,14 +1,14 @@
 import { parseSubs } from '../../src/subtitles.js'
 
-const plainTextExample = `<v voice1>line one 
+const plainTextExample1 = `<v voice1>line one 
 <v voice2>line two 
 line three 
 
 line five. `
 
-const result = parseSubs(plainTextExample)
+const result1 = parseSubs(plainTextExample1)
 
-const expectedOutput = [
+const expectedOutput1 = [
 	{
 		id: 1,
 		body: [
@@ -53,6 +53,17 @@ const expectedOutput = [
 	}
 ]
 
-test('plainText', () => {
-	expect(result).toEqual(expectedOutput)
+test('plainText1', () => {
+	expect(result1).toEqual(expectedOutput1)
 })
+
+/* const plainTextExample2 = `
+`
+
+const result2 = parseSubs(plainTextExample2)
+
+const expectedOutput2 = []
+
+test('plainText2', () => {
+	expect(result2).toEqual(expectedOutput2)
+}) */
