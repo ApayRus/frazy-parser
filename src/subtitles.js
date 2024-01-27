@@ -14,7 +14,7 @@ export const cueTemplates = {
 	srt: /^(\d+\s+)(\d\d:\d\d:\d\d,\d\d\d)\s+-->\s+(\d\d:\d\d:\d\d,\d\d\d)\s+([\s\S]+?)[\n\r]{2}/gm,
 	vtt: /^(.+[\n\r])?(\d?\d?:?\d\d:\d\d\.\d\d\d)\s+-->\s+(\d?\d?:?\d\d:\d\d\.\d\d\d).*?[\n\r]([\s\S]+?)[\n\r]{2}/gm,
 	ass: /^(Dialogue: 0,)?(\d?\d:\d\d:\d\d\.\d\d),(\d?\d:\d\d:\d\d\.\d\d)(,Default,,0,0,0,,)? ?(.+?)$/gm,
-	audacity: /^(\d+?(\.\d+?)?)\s+?(\d+?\.?(\.\d+?)?)\s+?(.+)$/gm, // a little tricky, because floating part is optional
+	audacity: /^(\d+?(\.\d+?)?)\s+?(\d+?\.?(\.\d+?)?)\s+?(.*)$/gm, // a little tricky, because floating part is optional
 	unknown: /^(.+)$/gm
 }
 
@@ -52,6 +52,22 @@ const parseSubs = (text, extractVoices = true) => {
 			return { id: index + 1, body }
 		})
 
+		return subsObject
+	}
+
+	// exception for this type because it can include empty rows, not like other formats
+	if (subsType === 'audacity') {
+		const textArray = text.split('\n')
+		const subsObject = textArray.map((line, index) => {
+			const lineContent = line.trim()
+			if (!lineContent) {
+				return undefined
+			}
+			const id = index + 1
+			const [start, end, bodyRaw] = lineContent.split(/\s+/)
+			const body = extractVoices ? extractVoiceTags(bodyRaw) : bodyRaw
+			return { id, start, end, body }
+		})
 		return subsObject
 	}
 
