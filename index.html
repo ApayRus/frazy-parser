@@ -49,7 +49,9 @@
 		const outputJsonElement = document.getElementById('output-json')
 
 		const parseSubsAndOutput = text => {
+			console.log(text)
 			const json = frazyParser.parseSubs(text)
+			console.log(json)
 			outputJsonElement.innerText = JSON.stringify(json, null, '\t')
 			subsTypeElement.innerText = frazyParser.checkSubsType(text)
 		}
