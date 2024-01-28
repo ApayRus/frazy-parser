@@ -48,8 +48,12 @@ const parseSubs = (text, extractVoices = true) => {
 		}
 		const textArray = text.split('\n')
 		const subsObject = textArray.map((elem, index) => {
+			const id = index + 1
+			if (!elem.trim()) {
+				return { id }
+			}
 			const body = extractVoices ? extractVoiceTags(elem) : elem
-			return { id: index + 1, body }
+			return { id, body }
 		})
 
 		return subsObject
@@ -60,10 +64,10 @@ const parseSubs = (text, extractVoices = true) => {
 		const textArray = text.split('\n')
 		const subsObject = textArray.map((line, index) => {
 			const lineContent = line.trim()
-			if (!lineContent) {
-				return undefined
-			}
 			const id = index + 1
+			if (!lineContent) {
+				return { id }
+			}
 			const [start, end, bodyRaw] = lineContent.split(/\s+/)
 			const body = extractVoices ? extractVoiceTags(bodyRaw) : bodyRaw
 			return { id, start, end, body }
