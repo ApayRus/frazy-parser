@@ -68,8 +68,10 @@ const parseSubs = (text, extractVoices = true) => {
 			if (!lineContent) {
 				return { id }
 			}
-			const [start, end, bodyRaw] = lineContent.split(/\s+/)
-			const body = extractVoices ? extractVoiceTags(bodyRaw) : bodyRaw
+			const [start, end, ...bodyRaw] = lineContent.split(/\s+/)
+			const body = extractVoices
+				? extractVoiceTags(bodyRaw.join(' '))
+				: bodyRaw.join(' ')
 			return { id, start, end, body }
 		})
 		return subsObject
